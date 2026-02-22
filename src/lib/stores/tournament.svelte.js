@@ -23,6 +23,8 @@ export function createTournament() {
     currentLevelIndex: 0,
     timeRemaining: 0,
     isRunning: false,
+    startTimestamp: 0,       // Date.now() when the clock last started/resumed or a new level began
+    timeRemainingAtStart: 0, // timeRemaining at that moment
   });
 
   return {
@@ -118,7 +120,13 @@ export function createTournament() {
         players: JSON.parse(JSON.stringify(players)),
         tables: JSON.parse(JSON.stringify(tables)),
         eliminations: JSON.parse(JSON.stringify(eliminations)),
-        clock: { currentLevelIndex: clock.currentLevelIndex, timeRemaining: clock.timeRemaining, isRunning: false },
+        clock: {
+          currentLevelIndex: clock.currentLevelIndex,
+          timeRemaining: clock.timeRemaining,
+          isRunning: false,
+          startTimestamp: clock.startTimestamp,
+          timeRemainingAtStart: clock.timeRemainingAtStart,
+        },
       };
       localStorage.setItem('poker-tournament', JSON.stringify(data));
     },
@@ -142,6 +150,8 @@ export function createTournament() {
       clock.currentLevelIndex = data.clock?.currentLevelIndex ?? 0;
       clock.timeRemaining = data.clock?.timeRemaining ?? 0;
       clock.isRunning = false;
+      clock.startTimestamp = data.clock?.startTimestamp ?? 0;
+      clock.timeRemainingAtStart = data.clock?.timeRemainingAtStart ?? 0;
     },
 
     reset() {
@@ -156,6 +166,8 @@ export function createTournament() {
       clock.currentLevelIndex = 0;
       clock.timeRemaining = 0;
       clock.isRunning = false;
+      clock.startTimestamp = 0;
+      clock.timeRemainingAtStart = 0;
       localStorage.removeItem('poker-tournament');
     },
 

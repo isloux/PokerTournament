@@ -9,10 +9,15 @@
 
   const activePlayers = $derived(tournament.activePlayers);
 
-  function eliminate() {
-    if (!selectedPlayer) return;
+  // Candidates for "eliminated by": only active players excluding the one being eliminated.
+  const eliminatedByOptions = $derived(
+    activePlayers.filter(p => p.id !== selectedPlayer)
+  );
 
-    tournament.eliminatePlayer(selectedPlayer, eliminatedBy || null);
+  function eliminate() {
+    if (!selectedPlayer || !eliminatedBy) return;
+
+    tournament.eliminatePlayer(selectedPlayer, eliminatedBy);
 
     // Check final table first
     const finalResult = checkFinalTable(
@@ -66,14 +71,14 @@
       <label>
         By:
         <select bind:value={eliminatedBy}>
-          <option value="">Optional...</option>
-          {#each activePlayers.filter(p => p.id !== selectedPlayer) as player}
+          <option value="">Select eliminator...</option>
+          {#each eliminatedByOptions as player}
             <option value={player.id}>{player.name}</option>
           {/each}
         </select>
       </label>
 
-      <button onclick={eliminate} disabled={!selectedPlayer}>Eliminate</button>
+      <button onclick={eliminate} disabled={!selectedPlayer || !eliminatedBy}>Eliminate</button>
     </div>
   {:else if activePlayers.length === 1}
     <p class="winner">Winner: {activePlayers[0].name}</p>

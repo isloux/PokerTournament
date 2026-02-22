@@ -3,15 +3,30 @@
   import { onMount } from 'svelte';
 
   let { children } = $props();
+  let confirming = $state(false);
 
   onMount(() => {
     tournament.load();
   });
+
+  function reset() {
+    tournament.reset();
+    confirming = false;
+  }
 </script>
 
 <div class="app">
   <header>
     <h1>Poker Tournament</h1>
+    {#if confirming}
+      <span class="confirm-prompt">
+        Are you sure?
+        <button class="confirm" onclick={reset}>Confirm</button>
+        <button class="cancel" onclick={() => confirming = false}>Cancel</button>
+      </span>
+    {:else}
+      <button class="new-tournament" onclick={() => confirming = true}>New Tournament</button>
+    {/if}
   </header>
   <main>
     {@render children()}
@@ -32,8 +47,53 @@
     padding: 1rem;
   }
 
-  header h1 {
-    font-size: 1.5rem;
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     margin: 0 0 1rem;
   }
+
+  header h1 {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .confirm-prompt {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .new-tournament, .confirm, .cancel {
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .new-tournament {
+    border: 1px solid #cbd5e1;
+    background: white;
+    color: #475569;
+  }
+
+  .new-tournament:hover { background: #f1f5f9; }
+
+  .confirm {
+    border: 1px solid #dc2626;
+    background: #dc2626;
+    color: white;
+  }
+
+  .confirm:hover { background: #b91c1c; }
+
+  .cancel {
+    border: 1px solid #cbd5e1;
+    background: white;
+    color: #475569;
+  }
+
+  .cancel:hover { background: #f1f5f9; }
 </style>
