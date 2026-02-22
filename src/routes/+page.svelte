@@ -1,5 +1,6 @@
 <script>
   import TabBar from '$lib/components/TabBar.svelte';
+  import StructureEditor from '$lib/components/Structure/StructureEditor.svelte';
 
   const tabs = [
     { id: 'structure', label: 'Structure' },
@@ -16,7 +17,7 @@
 
 <div class="tab-content">
   {#if activeTab === 'structure'}
-    <p>Structure tab (coming soon)</p>
+    <StructureEditor />
   {:else if activeTab === 'players'}
     <p>Players tab (coming soon)</p>
   {:else if activeTab === 'tables'}
