@@ -4,6 +4,7 @@
   import PlayerList from '$lib/components/Players/PlayerList.svelte';
   import TableSetup from '$lib/components/Tables/TableSetup.svelte';
   import Clock from '$lib/components/Clock/Clock.svelte';
+  import EliminationPanel from '$lib/components/Eliminations/EliminationPanel.svelte';
 
   const tabs = [
     { id: 'structure', label: 'Structure' },
@@ -28,7 +29,7 @@
   {:else if activeTab === 'clock'}
     <Clock />
   {:else if activeTab === 'eliminations'}
-    <p>Eliminations tab (coming soon)</p>
+    <EliminationPanel />
   {/if}
 </div>
 
