@@ -12,7 +12,7 @@
 		"test:watch": "vitest",
 		"prepare": "svelte-kit sync || echo ''",
 		"predeploy": "npm run build",
-		"deploy": "gh-pages -d build"
+		"deploy": "gh-pages -d build --dotfiles --nojekyll"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^7.0.0",
