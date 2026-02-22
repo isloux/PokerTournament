@@ -1,3 +1,15 @@
+function recalculateLevels(struct) {
+  let levelNum = 1;
+  for (const entry of struct) {
+    if (entry.type === 'round') {
+      entry.level = levelNum++;
+    } else {
+      delete entry.level;
+    }
+  }
+  return struct;
+}
+
 export function createTournament() {
   let name = $state('');
   let status = $state('setup');
@@ -49,6 +61,38 @@ export function createTournament() {
 
     get activePlayers() {
       return players.filter(p => p.status === 'active');
+    },
+
+    addRound({ smallBlind, bigBlind, ante, duration }) {
+      structure.push({ type: 'round', smallBlind, bigBlind, ante, duration, level: 0 });
+      recalculateLevels(structure);
+    },
+
+    addBreak(duration) {
+      structure.push({ type: 'break', duration });
+    },
+
+    removeLevel(index) {
+      structure.splice(index, 1);
+      recalculateLevels(structure);
+    },
+
+    moveLevelUp(index) {
+      if (index <= 0) return;
+      [structure[index - 1], structure[index]] = [structure[index], structure[index - 1]];
+      recalculateLevels(structure);
+    },
+
+    moveLevelDown(index) {
+      if (index >= structure.length - 1) return;
+      [structure[index], structure[index + 1]] = [structure[index + 1], structure[index]];
+      recalculateLevels(structure);
+    },
+
+    loadStructure(preset) {
+      structure.length = 0;
+      structure.push(...structuredClone(preset));
+      recalculateLevels(structure);
     },
   };
 }

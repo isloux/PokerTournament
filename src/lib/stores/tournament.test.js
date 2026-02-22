@@ -60,3 +60,73 @@ describe('player management', () => {
     expect(tournament.activePlayers[0].name).toBe('Bob');
   });
 });
+
+describe('structure management', () => {
+  let tournament;
+
+  beforeEach(() => {
+    tournament = createTournament();
+  });
+
+  it('adds a round', () => {
+    tournament.addRound({ smallBlind: 25, bigBlind: 50, ante: 0, duration: 20 });
+    expect(tournament.structure).toHaveLength(1);
+    expect(tournament.structure[0].type).toBe('round');
+    expect(tournament.structure[0].level).toBe(1);
+    expect(tournament.structure[0].smallBlind).toBe(25);
+    expect(tournament.structure[0].bigBlind).toBe(50);
+    expect(tournament.structure[0].duration).toBe(20);
+  });
+
+  it('auto-increments level numbers for rounds only', () => {
+    tournament.addRound({ smallBlind: 25, bigBlind: 50, ante: 0, duration: 20 });
+    tournament.addBreak(10);
+    tournament.addRound({ smallBlind: 50, bigBlind: 100, ante: 0, duration: 20 });
+    expect(tournament.structure[0].level).toBe(1);
+    expect(tournament.structure[1].level).toBeUndefined();
+    expect(tournament.structure[2].level).toBe(2);
+  });
+
+  it('adds a break', () => {
+    tournament.addBreak(10);
+    expect(tournament.structure).toHaveLength(1);
+    expect(tournament.structure[0].type).toBe('break');
+    expect(tournament.structure[0].duration).toBe(10);
+  });
+
+  it('removes a level by index', () => {
+    tournament.addRound({ smallBlind: 25, bigBlind: 50, ante: 0, duration: 20 });
+    tournament.addRound({ smallBlind: 50, bigBlind: 100, ante: 0, duration: 20 });
+    tournament.removeLevel(0);
+    expect(tournament.structure).toHaveLength(1);
+    expect(tournament.structure[0].level).toBe(1);
+  });
+
+  it('moves a level up', () => {
+    tournament.addRound({ smallBlind: 25, bigBlind: 50, ante: 0, duration: 20 });
+    tournament.addRound({ smallBlind: 50, bigBlind: 100, ante: 0, duration: 20 });
+    tournament.moveLevelUp(1);
+    expect(tournament.structure[0].smallBlind).toBe(50);
+    expect(tournament.structure[1].smallBlind).toBe(25);
+  });
+
+  it('moves a level down', () => {
+    tournament.addRound({ smallBlind: 25, bigBlind: 50, ante: 0, duration: 20 });
+    tournament.addRound({ smallBlind: 50, bigBlind: 100, ante: 0, duration: 20 });
+    tournament.moveLevelDown(0);
+    expect(tournament.structure[0].smallBlind).toBe(50);
+    expect(tournament.structure[1].smallBlind).toBe(25);
+  });
+
+  it('loads a structure (from preset)', () => {
+    const preset = [
+      { type: 'round', smallBlind: 25, bigBlind: 50, ante: 0, duration: 15 },
+      { type: 'break', duration: 10 },
+      { type: 'round', smallBlind: 50, bigBlind: 100, ante: 0, duration: 15 },
+    ];
+    tournament.loadStructure(preset);
+    expect(tournament.structure).toHaveLength(3);
+    expect(tournament.structure[0].level).toBe(1);
+    expect(tournament.structure[2].level).toBe(2);
+  });
+});
