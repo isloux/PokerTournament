@@ -10,7 +10,9 @@
 		"preview": "vite preview",
 		"test": "vitest run --passWithNoTests",
 		"test:watch": "vitest",
-		"prepare": "svelte-kit sync || echo ''"
+		"prepare": "svelte-kit sync || echo ''",
+		"predeploy": "npm run build",
+		"deploy": "gh-pages -d build"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^7.0.0",
