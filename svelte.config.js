@@ -12,7 +12,7 @@ const config = {
       fallback: 'index.html',
     }),
     paths: {
-      base: dev ? '' : (process.env.BASE_PATH || '/PokerTournament'),
+      base: dev ? '' : '/pokertournament',
     },
   },
 };
