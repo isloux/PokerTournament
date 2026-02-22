@@ -178,3 +178,45 @@ describe('elimination management', () => {
     expect(standings[2].position).toBe(3);
   });
 });
+
+describe('localStorage persistence', () => {
+  beforeEach(() => {
+    localStorage.clear();
+  });
+
+  it('saves state to localStorage', () => {
+    const tournament = createTournament();
+    tournament.name = 'Test Tournament';
+    tournament.save();
+    const stored = JSON.parse(localStorage.getItem('poker-tournament'));
+    expect(stored.name).toBe('Test Tournament');
+  });
+
+  it('loads state from localStorage', () => {
+    const data = {
+      name: 'Saved Tournament',
+      status: 'setup',
+      tableSize: 6,
+      finalTableThreshold: 9,
+      structure: [],
+      players: [],
+      tables: [],
+      eliminations: [],
+      clock: { currentLevelIndex: 0, timeRemaining: 0, isRunning: false },
+    };
+    localStorage.setItem('poker-tournament', JSON.stringify(data));
+    const tournament = createTournament();
+    tournament.load();
+    expect(tournament.name).toBe('Saved Tournament');
+    expect(tournament.tableSize).toBe(6);
+  });
+
+  it('resets to initial state', () => {
+    const tournament = createTournament();
+    tournament.name = 'Test';
+    tournament.addPlayer('Alice');
+    tournament.reset();
+    expect(tournament.name).toBe('');
+    expect(tournament.players).toHaveLength(0);
+  });
+});

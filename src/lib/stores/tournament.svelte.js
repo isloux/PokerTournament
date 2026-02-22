@@ -111,6 +111,54 @@ export function createTournament() {
       });
     },
 
+    save() {
+      const data = {
+        name, status, tableSize, finalTableThreshold,
+        structure: JSON.parse(JSON.stringify(structure)),
+        players: JSON.parse(JSON.stringify(players)),
+        tables: JSON.parse(JSON.stringify(tables)),
+        eliminations: JSON.parse(JSON.stringify(eliminations)),
+        clock: { currentLevelIndex: clock.currentLevelIndex, timeRemaining: clock.timeRemaining, isRunning: false },
+      };
+      localStorage.setItem('poker-tournament', JSON.stringify(data));
+    },
+
+    load() {
+      const stored = localStorage.getItem('poker-tournament');
+      if (!stored) return;
+      const data = JSON.parse(stored);
+      name = data.name ?? '';
+      status = data.status ?? 'setup';
+      tableSize = data.tableSize ?? 9;
+      finalTableThreshold = data.finalTableThreshold ?? 9;
+      structure.length = 0;
+      structure.push(...(data.structure ?? []));
+      players.length = 0;
+      players.push(...(data.players ?? []));
+      tables.length = 0;
+      tables.push(...(data.tables ?? []));
+      eliminations.length = 0;
+      eliminations.push(...(data.eliminations ?? []));
+      clock.currentLevelIndex = data.clock?.currentLevelIndex ?? 0;
+      clock.timeRemaining = data.clock?.timeRemaining ?? 0;
+      clock.isRunning = false;
+    },
+
+    reset() {
+      name = '';
+      status = 'setup';
+      tableSize = 9;
+      finalTableThreshold = 9;
+      structure.length = 0;
+      players.length = 0;
+      tables.length = 0;
+      eliminations.length = 0;
+      clock.currentLevelIndex = 0;
+      clock.timeRemaining = 0;
+      clock.isRunning = false;
+      localStorage.removeItem('poker-tournament');
+    },
+
     get standings() {
       const active = players
         .filter(p => p.status === 'active')
