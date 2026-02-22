@@ -94,5 +94,40 @@ export function createTournament() {
       structure.push(...structuredClone(preset));
       recalculateLevels(structure);
     },
+
+    eliminatePlayer(playerId, eliminatedById) {
+      const player = players.find(p => p.id === playerId);
+      if (!player || player.status !== 'active') return;
+
+      player.status = 'eliminated';
+      player.tableId = null;
+      player.seat = null;
+
+      eliminations.push({
+        playerId,
+        eliminatedBy: eliminatedById || null,
+        round: clock.currentLevelIndex,
+        timestamp: new Date().toISOString(),
+      });
+    },
+
+    get standings() {
+      const active = players
+        .filter(p => p.status === 'active')
+        .map(p => ({ ...p, position: null }));
+
+      const eliminated = [...eliminations]
+        .reverse()
+        .map((e, i) => {
+          const player = players.find(p => p.id === e.playerId);
+          return { ...player, position: active.length + i + 1 };
+        });
+
+      active.forEach((p, i) => { p.position = i + 1; });
+
+      if (active.length === 1) active[0].position = 1;
+
+      return [...active, ...eliminated];
+    },
   };
 }

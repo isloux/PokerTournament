@@ -130,3 +130,51 @@ describe('structure management', () => {
     expect(tournament.structure[2].level).toBe(2);
   });
 });
+
+describe('elimination management', () => {
+  let tournament;
+
+  beforeEach(() => {
+    tournament = createTournament();
+    tournament.addPlayer('Alice');
+    tournament.addPlayer('Bob');
+    tournament.addPlayer('Charlie');
+  });
+
+  it('eliminates a player', () => {
+    const alice = tournament.players[0];
+    const bob = tournament.players[1];
+    tournament.clock.currentLevelIndex = 2;
+    tournament.eliminatePlayer(alice.id, bob.id);
+
+    expect(alice.status).toBe('eliminated');
+    expect(tournament.eliminations).toHaveLength(1);
+    expect(tournament.eliminations[0].playerId).toBe(alice.id);
+    expect(tournament.eliminations[0].eliminatedBy).toBe(bob.id);
+    expect(tournament.eliminations[0].round).toBe(2);
+  });
+
+  it('eliminates a player without eliminator', () => {
+    const alice = tournament.players[0];
+    tournament.eliminatePlayer(alice.id, null);
+    expect(tournament.eliminations[0].eliminatedBy).toBe(null);
+  });
+
+  it('computes standings in correct order', () => {
+    const alice = tournament.players[0];
+    const bob = tournament.players[1];
+    const charlie = tournament.players[2];
+
+    tournament.eliminatePlayer(alice.id, bob.id);
+    tournament.eliminatePlayer(bob.id, charlie.id);
+
+    const standings = tournament.standings;
+    // Charlie is active (1st), Bob eliminated last (2nd), Alice first eliminated (3rd)
+    expect(standings[0].name).toBe('Charlie');
+    expect(standings[0].position).toBe(1);
+    expect(standings[1].name).toBe('Bob');
+    expect(standings[1].position).toBe(2);
+    expect(standings[2].name).toBe('Alice');
+    expect(standings[2].position).toBe(3);
+  });
+});
