@@ -14,7 +14,7 @@
 </script>
 
 <div class="presets">
-  <label>Load preset:</label>
+  <span class="label">Load preset:</span>
   {#each presetNames as name}
     <button onclick={() => loadPreset(name)}>{name}</button>
   {/each}
@@ -28,7 +28,7 @@
     margin-bottom: 1rem;
   }
 
-  label {
+  .label {
     font-weight: 600;
     font-size: 0.9rem;
   }
