@@ -32,5 +32,23 @@ export function createTournament() {
     set eliminations(v) { eliminations = v; },
     get clock() { return clock; },
     set clock(v) { clock = v; },
+
+    addPlayer(playerName) {
+      players.push({
+        id: crypto.randomUUID(),
+        name: playerName,
+        status: 'active',
+        tableId: null,
+        seat: null,
+      });
+    },
+
+    removePlayer(id) {
+      players = players.filter(p => p.id !== id);
+    },
+
+    get activePlayers() {
+      return players.filter(p => p.status === 'active');
+    },
   };
 }
