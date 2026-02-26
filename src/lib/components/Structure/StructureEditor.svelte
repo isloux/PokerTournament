@@ -1,5 +1,6 @@
 <script>
   import { tournament } from '$lib/stores/index.js';
+  import { t } from '$lib/i18n/index.svelte.js';
   import Presets from './Presets.svelte';
   import LevelRow from './LevelRow.svelte';
 
@@ -64,17 +65,17 @@
 {#if !disabled}
   <div class="add-controls">
     <fieldset>
-      <legend>Add Round</legend>
-      <label>Small <input type="number" bind:value={newSmallBlind} min="1" /></label>
-      <label>Big <input type="number" bind:value={newBigBlind} min="1" /></label>
-      <label>Ante <input type="number" bind:value={newAnte} min="0" /></label>
-      <label>Min <input type="number" bind:value={newDuration} min="1" /></label>
-      <button onclick={addRound}>Add Round</button>
+      <legend>{t('structure.addRound')}</legend>
+      <label>{t('structure.small')} <input type="number" bind:value={newSmallBlind} min="1" /></label>
+      <label>{t('structure.big')} <input type="number" bind:value={newBigBlind} min="1" /></label>
+      <label>{t('structure.ante')} <input type="number" bind:value={newAnte} min="0" /></label>
+      <label>{t('structure.duration')} <input type="number" bind:value={newDuration} min="1" /></label>
+      <button onclick={addRound}>{t('structure.addRound')}</button>
     </fieldset>
     <fieldset>
-      <legend>Add Break</legend>
-      <label>Min <input type="number" bind:value={newBreakDuration} min="1" /></label>
-      <button onclick={addBreak}>Add Break</button>
+      <legend>{t('structure.addBreak')}</legend>
+      <label>{t('structure.duration')} <input type="number" bind:value={newBreakDuration} min="1" /></label>
+      <button onclick={addBreak}>{t('structure.addBreak')}</button>
     </fieldset>
   </div>
 {/if}

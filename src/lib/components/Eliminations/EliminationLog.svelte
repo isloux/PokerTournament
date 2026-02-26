@@ -1,5 +1,6 @@
 <script>
   import { tournament } from '$lib/stores/index.js';
+  import { t } from '$lib/i18n/index.svelte.js';
 
   const standings = $derived(tournament.standings);
 
@@ -9,14 +10,14 @@
 </script>
 
 <div class="log">
-  <h3>Standings</h3>
+  <h3>{t('elim.standings')}</h3>
   <table>
     <thead>
       <tr>
-        <th>#</th>
-        <th>Player</th>
-        <th>Status</th>
-        <th>Eliminated By</th>
+        <th>{t('elim.position')}</th>
+        <th>{t('elim.player')}</th>
+        <th>{t('elim.status')}</th>
+        <th>{t('elim.eliminatedBy')}</th>
       </tr>
     </thead>
     <tbody>
@@ -24,7 +25,7 @@
         <tr class:eliminated={entry.status === 'eliminated'}>
           <td>{entry.position}</td>
           <td>{entry.name}</td>
-          <td>{entry.status === 'active' ? 'Playing' : 'Out'}</td>
+          <td>{entry.status === 'active' ? t('elim.playing') : t('elim.out')}</td>
           <td>
             {#if entry.status === 'eliminated'}
               {@const elim = tournament.eliminations.find(e => e.playerId === entry.id)}

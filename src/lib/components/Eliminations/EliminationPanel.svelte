@@ -1,6 +1,7 @@
 <script>
   import { tournament } from '$lib/stores/index.js';
   import { rebalanceTables, checkFinalTable } from '$lib/utils/tableAssignment.js';
+  import { t } from '$lib/i18n/index.svelte.js';
   import EliminationLog from './EliminationLog.svelte';
 
   let selectedPlayer = $state('');
@@ -27,13 +28,13 @@
     );
 
     if (finalResult) {
-      notification = `Final Table! ${finalResult.moves.length} player(s) moved.`;
+      notification = t('elim.finalTable', { count: finalResult.moves.length });
     } else {
       // Rebalance
       const { moves } = rebalanceTables(tournament.players, tournament.tables);
       if (moves.length > 0) {
         notification = moves.map(m =>
-          `${tournament.players.find(p => p.id === m.playerId)?.name} moved from ${m.from} to ${m.to}`
+          t('elim.moved', { name: tournament.players.find(p => p.id === m.playerId)?.name, from: m.from, to: m.to })
         ).join('. ');
       } else {
         notification = '';
@@ -46,7 +47,7 @@
 
     // Check if tournament is over (1 player left)
     if (tournament.activePlayers.length === 1) {
-      notification = `Tournament over! Winner: ${tournament.activePlayers[0].name}`;
+      notification = t('elim.tournamentOver', { name: tournament.activePlayers[0].name });
       tournament.status = 'finished';
       tournament.save();
     }
@@ -59,9 +60,9 @@
   {#if activePlayers.length > 1}
     <div class="form">
       <label>
-        Eliminated:
+        {t('elim.eliminated')}
         <select bind:value={selectedPlayer}>
-          <option value="">Select player...</option>
+          <option value="">{t('elim.selectPlayer')}</option>
           {#each activePlayers as player}
             <option value={player.id}>{player.name}</option>
           {/each}
@@ -69,21 +70,21 @@
       </label>
 
       <label>
-        By:
+        {t('elim.by')}
         <select bind:value={eliminatedBy}>
-          <option value="">Select eliminator...</option>
+          <option value="">{t('elim.selectEliminator')}</option>
           {#each eliminatedByOptions as player}
             <option value={player.id}>{player.name}</option>
           {/each}
         </select>
       </label>
 
-      <button onclick={eliminate} disabled={!selectedPlayer || !eliminatedBy}>Eliminate</button>
+      <button onclick={eliminate} disabled={!selectedPlayer || !eliminatedBy}>{t('elim.eliminate')}</button>
     </div>
   {:else if activePlayers.length === 1}
-    <p class="winner">Winner: {activePlayers[0].name}</p>
+    <p class="winner">{t('elim.winner', { name: activePlayers[0].name })}</p>
   {:else}
-    <p class="empty">No active players.</p>
+    <p class="empty">{t('elim.noActive')}</p>
   {/if}
 
   {#if notification}

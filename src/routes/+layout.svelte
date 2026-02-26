@@ -1,5 +1,6 @@
 <script>
   import { tournament } from '$lib/stores/index.js';
+  import { t, toggleLocale, getLocale } from '$lib/i18n/index.svelte.js';
   import { onMount } from 'svelte';
 
   let { children } = $props();
@@ -7,6 +8,10 @@
 
   onMount(() => {
     tournament.load();
+  });
+
+  $effect(() => {
+    document.documentElement.lang = getLocale();
   });
 
   function reset() {
@@ -17,16 +22,21 @@
 
 <div class="app">
   <header>
-    <h1>Poker Tournament</h1>
-    {#if confirming}
-      <span class="confirm-prompt">
-        Are you sure?
-        <button class="confirm" onclick={reset}>Confirm</button>
-        <button class="cancel" onclick={() => confirming = false}>Cancel</button>
-      </span>
-    {:else}
-      <button class="new-tournament" onclick={() => confirming = true}>New Tournament</button>
-    {/if}
+    <h1>{t('app.title')}</h1>
+    <div class="header-actions">
+      <button class="lang-toggle" onclick={toggleLocale}>
+        {getLocale() === 'en' ? 'FR' : 'EN'}
+      </button>
+      {#if confirming}
+        <span class="confirm-prompt">
+          {t('app.areYouSure')}
+          <button class="confirm" onclick={reset}>{t('app.confirm')}</button>
+          <button class="cancel" onclick={() => confirming = false}>{t('app.cancel')}</button>
+        </span>
+      {:else}
+        <button class="new-tournament" onclick={() => confirming = true}>{t('app.newTournament')}</button>
+      {/if}
+    </div>
   </header>
   <main>
     {@render children()}
@@ -96,4 +106,23 @@
   }
 
   .cancel:hover { background: #f1f5f9; }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .lang-toggle {
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    border: 1px solid #cbd5e1;
+    background: white;
+    color: #475569;
+    font-weight: 600;
+  }
+
+  .lang-toggle:hover { background: #f1f5f9; }
 </style>

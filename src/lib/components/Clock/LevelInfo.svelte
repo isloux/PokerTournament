@@ -1,4 +1,5 @@
 <script>
+  import { t } from '$lib/i18n/index.svelte.js';
   let { level, label } = $props();
 </script>
 
@@ -6,12 +7,12 @@
   <div class="level-info">
     <span class="label">{label}</span>
     {#if level.type === 'round'}
-      <span class="blinds">Blinds: {level.smallBlind}/{level.bigBlind}</span>
+      <span class="blinds">{t('clock.blinds')}: {level.smallBlind}/{level.bigBlind}</span>
       {#if level.ante > 0}
-        <span class="ante">Ante: {level.ante}</span>
+        <span class="ante">{t('structure.ante')}: {level.ante}</span>
       {/if}
     {:else}
-      <span class="break-text">Break</span>
+      <span class="break-text">{t('structure.break')}</span>
     {/if}
   </div>
 {/if}

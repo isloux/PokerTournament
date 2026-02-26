@@ -1,15 +1,16 @@
 <script>
+  import { t } from '$lib/i18n/index.svelte.js';
   let { isRunning, onToggle, onPrev, onNext, canPrev, canNext, isMuted, onToggleMute } = $props();
 </script>
 
 <div class="controls">
-  <button onclick={onPrev} disabled={!canPrev} title="Previous level">&laquo; Prev</button>
+  <button onclick={onPrev} disabled={!canPrev} title={t('clock.prevLevel')}>&laquo; {t('clock.prev')}</button>
   <button class="play-pause" onclick={onToggle}>
-    {isRunning ? 'Pause' : 'Play'}
+    {isRunning ? t('clock.pause') : t('clock.play')}
   </button>
-  <button onclick={onNext} disabled={!canNext} title="Next level">Next &raquo;</button>
-  <button class="mute" onclick={onToggleMute} title={isMuted ? 'Unmute' : 'Mute'}>
-    {isMuted ? 'Unmute' : 'Mute'}
+  <button onclick={onNext} disabled={!canNext} title={t('clock.nextLevel')}>{t('clock.next')} &raquo;</button>
+  <button class="mute" onclick={onToggleMute} title={isMuted ? t('clock.unmute') : t('clock.mute')}>
+    {isMuted ? t('clock.unmute') : t('clock.mute')}
   </button>
 </div>
 

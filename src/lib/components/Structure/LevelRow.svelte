@@ -1,15 +1,16 @@
 <script>
+  import { t } from '$lib/i18n/index.svelte.js';
   let { level, index, onRemove, onMoveUp, onMoveDown, isFirst, isLast, disabled } = $props();
 </script>
 
 <div class="level-row" class:is-break={level.type === 'break'}>
   {#if level.type === 'round'}
-    <span class="level-num">Level {level.level}</span>
+    <span class="level-num">{t('structure.level')} {level.level}</span>
     <span class="blinds">{level.smallBlind}/{level.bigBlind}</span>
-    <span class="ante">Ante: {level.ante}</span>
+    <span class="ante">{t('structure.ante')}: {level.ante}</span>
     <span class="duration">{level.duration} min</span>
   {:else}
-    <span class="break-label">Break</span>
+    <span class="break-label">{t('structure.break')}</span>
     <span class="duration">{level.duration} min</span>
   {/if}
 

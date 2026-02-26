@@ -1,5 +1,6 @@
 <script>
   import { tournament } from '$lib/stores/index.js';
+  import { t } from '$lib/i18n/index.svelte.js';
 
   let newName = $state('');
 
@@ -27,16 +28,15 @@
   <div class="add-player">
     <input
       type="text"
-      placeholder="Player name"
+      placeholder={t('players.placeholder')}
       bind:value={newName}
       onkeydown={handleKeydown}
     />
-    <button onclick={addPlayer}>Add Player</button>
+    <button onclick={addPlayer}>{t('players.add')}</button>
   </div>
 
   <p class="count">
-    {tournament.players.length} players registered
-    ({tournament.activePlayers.length} active)
+    {t('players.count', { total: tournament.players.length, active: tournament.activePlayers.length })}
   </p>
 
   <ul class="player-list">
@@ -44,7 +44,7 @@
       <li class:eliminated={player.status === 'eliminated'}>
         <span class="name">{player.name}</span>
         {#if player.status === 'eliminated'}
-          <span class="status">Eliminated</span>
+          <span class="status">{t('players.eliminated')}</span>
         {/if}
         {#if canRemove}
           <button class="remove" onclick={() => removePlayer(player.id)}>&times;</button>

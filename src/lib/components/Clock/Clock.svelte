@@ -1,6 +1,7 @@
 <script>
   import { tournament } from '$lib/stores/index.js';
   import { createAudioManager } from '$lib/utils/audio.js';
+  import { t } from '$lib/i18n/index.svelte.js';
   import { onMount, onDestroy } from 'svelte';
   import LevelInfo from './LevelInfo.svelte';
   import Controls from './Controls.svelte';
@@ -191,17 +192,17 @@
 
 <div class="clock-tab" class:is-break={isBreak}>
   {#if tournament.structure.length === 0}
-    <p class="empty">Set up the tournament structure first.</p>
+    <p class="empty">{t('clock.setupFirst')}</p>
   {:else}
     {#if isBreak}
-      <div class="break-banner">BREAK</div>
+      <div class="break-banner">{t('clock.break')}</div>
     {/if}
 
-    <LevelInfo level={currentLevel} label="Current" />
+    <LevelInfo level={currentLevel} label={t('clock.current')} />
 
     <div class="timer">{display}</div>
 
-    <LevelInfo level={nextLevel} label="Next" />
+    <LevelInfo level={nextLevel} label={t('clock.next')} />
 
     <Controls
       isRunning={tournament.clock.isRunning}

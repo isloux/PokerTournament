@@ -5,14 +5,15 @@
   import TableSetup from '$lib/components/Tables/TableSetup.svelte';
   import Clock from '$lib/components/Clock/Clock.svelte';
   import EliminationPanel from '$lib/components/Eliminations/EliminationPanel.svelte';
+  import { t } from '$lib/i18n/index.svelte.js';
 
-  const tabs = [
-    { id: 'structure', label: 'Structure' },
-    { id: 'players', label: 'Players' },
-    { id: 'tables', label: 'Tables' },
-    { id: 'clock', label: 'Clock' },
-    { id: 'eliminations', label: 'Eliminations' },
-  ];
+  const tabs = $derived([
+    { id: 'structure', label: t('tabs.structure') },
+    { id: 'players', label: t('tabs.players') },
+    { id: 'tables', label: t('tabs.tables') },
+    { id: 'clock', label: t('tabs.clock') },
+    { id: 'eliminations', label: t('tabs.eliminations') },
+  ]);
 
   let activeTab = $state('structure');
 </script>

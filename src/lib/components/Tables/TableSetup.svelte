@@ -1,6 +1,7 @@
 <script>
   import { tournament } from '$lib/stores/index.js';
   import { assignTables } from '$lib/utils/tableAssignment.js';
+  import { t } from '$lib/i18n/index.svelte.js';
   import TableView from './TableView.svelte';
 
   let notification = $state('');
@@ -13,7 +14,7 @@
     const result = assignTables(tournament.players, tournament.tableSize);
     tournament.tables = result.tables;
     tournament.save();
-    notification = `Assigned ${tournament.activePlayers.length} players to ${result.tables.length} table(s).`;
+    notification = t('tables.assigned', { players: tournament.activePlayers.length, tables: result.tables.length });
     setTimeout(() => notification = '', 3000);
   }
 </script>
@@ -21,18 +22,18 @@
 <div class="table-setup">
   <div class="settings">
     <label>
-      Max players per table:
+      {t('tables.maxPerTable')}
       <input type="number" bind:value={tournament.tableSize} min="2" max="10" />
     </label>
     <label>
-      Final table at:
+      {t('tables.finalTableAt')}
       <input type="number" bind:value={tournament.finalTableThreshold} min="2" max="20" />
-      <span class="hint">players</span>
+      <span class="hint">{t('tables.players')}</span>
     </label>
   </div>
 
   <button class="assign-btn" onclick={doAssign} disabled={!canAssign}>
-    Assign Tables
+    {t('tables.assign')}
   </button>
 
   {#if notification}
@@ -46,7 +47,7 @@
       {/each}
     </div>
   {:else}
-    <p class="empty">No tables assigned yet. Register players and click "Assign Tables".</p>
+    <p class="empty">{t('tables.empty')}</p>
   {/if}
 </div>
 

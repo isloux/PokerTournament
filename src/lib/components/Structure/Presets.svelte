@@ -1,6 +1,7 @@
 <script>
   import { tournament } from '$lib/stores/index.js';
   import { PRESETS, getPreset } from '$lib/utils/presets.js';
+  import { t } from '$lib/i18n/index.svelte.js';
 
   const presetNames = Object.keys(PRESETS);
 
@@ -14,7 +15,7 @@
 </script>
 
 <div class="presets">
-  <span class="label">Load preset:</span>
+  <span class="label">{t('structure.loadPreset')}</span>
   {#each presetNames as name}
     <button onclick={() => loadPreset(name)}>{name}</button>
   {/each}

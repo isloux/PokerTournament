@@ -1,4 +1,5 @@
 <script>
+  import { t } from '$lib/i18n/index.svelte.js';
   let { table, players } = $props();
 
   const seatedPlayers = $derived(
@@ -13,7 +14,7 @@
   <p class="count">{seatedPlayers.length} / {table.seats} seats</p>
   <ul>
     {#each seatedPlayers as player}
-      <li>Seat {player.seat}: {player.name}</li>
+      <li>{t('tables.seat')} {player.seat}: {player.name}</li>
     {/each}
   </ul>
 </div>
