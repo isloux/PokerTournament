@@ -2,6 +2,8 @@
   import { tournament } from '$lib/stores/index.js';
   import { t, toggleLocale, getLocale } from '$lib/i18n/index.svelte.js';
   import { onMount } from 'svelte';
+  import EnglishFlag from '$lib/components/icons/EnglishFlag.svelte';
+  import FrenchFlag from '$lib/components/icons/FrenchFlag.svelte';
 
   let { children } = $props();
   let confirming = $state(false);
@@ -24,8 +26,12 @@
   <header>
     <h1>{t('app.title')}</h1>
     <div class="header-actions">
-      <button class="lang-toggle" onclick={toggleLocale}>
-        {getLocale() === 'en' ? 'FR' : 'EN'}
+      <button class="lang-toggle" onclick={toggleLocale} aria-label="Toggle language">
+        {#if getLocale() === 'en'}
+          <FrenchFlag />
+        {:else}
+          <EnglishFlag />
+        {/if}
       </button>
       {#if confirming}
         <span class="confirm-prompt">
@@ -114,14 +120,14 @@
   }
 
   .lang-toggle {
-    padding: 0.35rem 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem;
     border-radius: 4px;
-    font-size: 0.85rem;
     cursor: pointer;
     border: 1px solid #cbd5e1;
     background: white;
-    color: #475569;
-    font-weight: 600;
   }
 
   .lang-toggle:hover { background: #f1f5f9; }
