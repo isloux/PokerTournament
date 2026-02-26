@@ -3,10 +3,16 @@
   import { t } from '$lib/i18n/index.svelte.js';
 
   let newName = $state('');
+  let duplicateError = $state(false);
 
   function addPlayer() {
     const name = newName.trim();
     if (!name) return;
+    if (tournament.players.some(p => p.name.toLowerCase() === name.toLowerCase())) {
+      duplicateError = true;
+      return;
+    }
+    duplicateError = false;
     tournament.addPlayer(name);
     tournament.save();
     newName = '';
@@ -30,10 +36,14 @@
       type="text"
       placeholder={t('players.placeholder')}
       bind:value={newName}
+      oninput={() => duplicateError = false}
       onkeydown={handleKeydown}
     />
     <button onclick={addPlayer}>{t('players.add')}</button>
   </div>
+  {#if duplicateError}
+    <p class="error">{t('players.duplicateName')}</p>
+  {/if}
 
   <p class="count">
     {t('players.count', { total: tournament.players.length, active: tournament.activePlayers.length })}
@@ -76,6 +86,12 @@
     color: white;
     border-radius: 4px;
     cursor: pointer;
+  }
+
+  .error {
+    color: #dc2626;
+    font-size: 0.85rem;
+    margin: -0.5rem 0 0.75rem;
   }
 
   .count {

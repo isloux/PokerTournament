@@ -91,7 +91,7 @@ export function rebalanceTables(players, tables) {
   return { moves, tables: remainingTables };
 }
 
-export function checkFinalTable(players, tables, finalTableThreshold) {
+export function checkFinalTable(players, tables, finalTableThreshold, finalTableName = 'Final Table') {
   const active = players.filter(p => p.status === 'active');
   if (active.length > finalTableThreshold) return null;
 
@@ -99,12 +99,13 @@ export function checkFinalTable(players, tables, finalTableThreshold) {
   if (activeTables.length <= 1) return null;
 
   const finalTable = activeTables[0];
-  finalTable.name = 'Final Table';
+  finalTable.name = finalTableName;
+  finalTable.seats = active.length;
   const moves = [];
 
   for (const p of active) {
     if (p.tableId !== finalTable.id) {
-      moves.push({ playerId: p.id, from: tables.find(t => t.id === p.tableId)?.name, to: 'Final Table' });
+      moves.push({ playerId: p.id, from: tables.find(t => t.id === p.tableId)?.name, to: finalTableName });
       p.tableId = finalTable.id;
     }
   }

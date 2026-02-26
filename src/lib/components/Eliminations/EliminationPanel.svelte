@@ -10,10 +10,23 @@
 
   const activePlayers = $derived(tournament.activePlayers);
 
-  // Candidates for "eliminated by": only active players excluding the one being eliminated.
-  const eliminatedByOptions = $derived(
-    activePlayers.filter(p => p.id !== selectedPlayer)
+  const selectedPlayerTableId = $derived(
+    activePlayers.find(p => p.id === selectedPlayer)?.tableId ?? null
   );
+
+  // Candidates for "eliminated by": active players at the same table, excluding the eliminated player.
+  // Falls back to all active players if the eliminated player has no table assignment.
+  const eliminatedByOptions = $derived(
+    activePlayers.filter(p => p.id !== selectedPlayer &&
+      (selectedPlayerTableId === null || p.tableId === selectedPlayerTableId))
+  );
+
+  $effect(() => {
+    // Reset eliminator if they're no longer a valid option after player selection changes.
+    if (eliminatedBy && !eliminatedByOptions.some(p => p.id === eliminatedBy)) {
+      eliminatedBy = '';
+    }
+  });
 
   function eliminate() {
     if (!selectedPlayer || !eliminatedBy) return;
@@ -24,7 +37,8 @@
     const finalResult = checkFinalTable(
       tournament.players,
       tournament.tables,
-      tournament.finalTableThreshold
+      tournament.finalTableThreshold,
+      t('tables.finalTable')
     );
 
     if (finalResult) {
@@ -52,7 +66,6 @@
       tournament.save();
     }
 
-    if (notification) setTimeout(() => notification = '', 5000);
   }
 </script>
 
@@ -88,7 +101,10 @@
   {/if}
 
   {#if notification}
-    <p class="notification">{notification}</p>
+    <div class="notification">
+      <p>{notification}</p>
+      <button class="ok" onclick={() => notification = ''}>{t('elim.ok')}</button>
+    </div>
   {/if}
 
   <EliminationLog />
@@ -130,11 +146,31 @@
   button:disabled { opacity: 0.4; cursor: default; }
 
   .notification {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .notification p {
     color: #2563eb;
     font-size: 0.9rem;
     font-weight: 500;
-    margin-bottom: 1rem;
+    margin: 0;
   }
+
+  .ok {
+    padding: 0.3rem 0.8rem;
+    border: 1px solid #2563eb;
+    background: #2563eb;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  .ok:hover { background: #1d4ed8; }
 
   .winner {
     font-size: 1.25rem;

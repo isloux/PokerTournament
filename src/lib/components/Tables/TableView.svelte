@@ -11,7 +11,7 @@
 
 <div class="table-view">
   <h3>{table.name}</h3>
-  <p class="count">{seatedPlayers.length} / {table.seats} seats</p>
+  <p class="count">{seatedPlayers.length} / {table.seats} {t('tables.seats')}</p>
   <ul>
     {#each seatedPlayers as player}
       <li>{t('tables.seat')} {player.seat}: {player.name}</li>

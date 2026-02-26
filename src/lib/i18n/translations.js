@@ -29,6 +29,7 @@ export const translations = {
   'players.add': { en: 'Add Player', fr: 'Ajouter un joueur' },
   'players.count': { en: '{total} players registered ({active} active)', fr: '{total} joueurs inscrits ({active} actifs)' },
   'players.eliminated': { en: 'Eliminated', fr: 'Éliminé' },
+  'players.duplicateName': { en: 'A player with this name already exists.', fr: 'Un joueur avec ce nom existe déjà.' },
 
   // Tables
   'tables.maxPerTable': { en: 'Max players per table:', fr: 'Joueurs max par table :' },
@@ -38,6 +39,8 @@ export const translations = {
   'tables.assigned': { en: 'Assigned {players} players to {tables} table(s).', fr: '{players} joueurs assignés à {tables} table(s).' },
   'tables.empty': { en: 'No tables assigned yet. Register players and click "Assign Tables".', fr: 'Aucune table assignée. Inscrivez des joueurs et cliquez sur « Assigner les tables ».' },
   'tables.seat': { en: 'Seat', fr: 'Siège' },
+  'tables.finalTable': { en: 'Final Table', fr: 'Table Finale' },
+  'tables.seats': { en: 'seats', fr: 'sièges' },
 
   // Clock
   'clock.setupFirst': { en: 'Set up the tournament structure first.', fr: 'Configurez d\'abord la structure du tournoi.' },
@@ -71,4 +74,5 @@ export const translations = {
   'elim.eliminatedBy': { en: 'Eliminated By', fr: 'Éliminé par' },
   'elim.playing': { en: 'Playing', fr: 'En jeu' },
   'elim.out': { en: 'Out', fr: 'Sorti' },
+  'elim.ok': { en: 'OK', fr: 'OK' },
 };

@@ -102,7 +102,7 @@ describe('checkFinalTable', () => {
       { id: 't1', name: 'Table 1', seats: 6 },
       { id: 't2', name: 'Table 2', seats: 6 },
     ];
-    const result = checkFinalTable(players, tables, 3);
+    const result = checkFinalTable(players, tables, 3, 'Final Table');
     expect(result).not.toBe(null);
     expect(result.finalTable.name).toBe('Final Table');
     expect(players.filter(p => p.status === 'active').every(p => p.tableId === 't1')).toBe(true);
