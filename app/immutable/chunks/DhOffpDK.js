@@ -195,7 +195,7 @@ function De(e, t, n = JSON.stringify) {
   } catch {
   }
 }
-const x = ((_a = globalThis.__sveltekit_1huwkfm) == null ? void 0 : _a.base) ?? "/pokertournament", Tt = ((_b = globalThis.__sveltekit_1huwkfm) == null ? void 0 : _b.assets) ?? x ?? "", It = "1772118342845", We = "sveltekit:snapshot", Ye = "sveltekit:scroll", He = "sveltekit:states", Ot = "sveltekit:pageurl", K = "sveltekit:history", W = "sveltekit:navigation", j = { tap: 1, hover: 2, viewport: 3, eager: 4, off: -1, false: -1 }, Ae = location.origin;
+const x = ((_a = globalThis.__sveltekit_8nymd5) == null ? void 0 : _a.base) ?? "/pokertournament", Tt = ((_b = globalThis.__sveltekit_8nymd5) == null ? void 0 : _b.assets) ?? x ?? "", It = "1772123362796", We = "sveltekit:snapshot", Ye = "sveltekit:scroll", He = "sveltekit:states", Ot = "sveltekit:pageurl", K = "sveltekit:history", W = "sveltekit:navigation", j = { tap: 1, hover: 2, viewport: 3, eager: 4, off: -1, false: -1 }, Ae = location.origin;
 function Je(e) {
   if (e instanceof URL) return e;
   let t = document.baseURI;
@@ -422,7 +422,7 @@ let _ = { branch: [], error: null, url: null }, rt = false, se = false, Me = tru
 const ie = /* @__PURE__ */ new Set(), ze = /* @__PURE__ */ new Map();
 async function fn(e, t, n) {
   var _a3, _b2, _c2, _d2, _e6;
-  ((_a3 = globalThis.__sveltekit_1huwkfm) == null ? void 0 : _a3.data) && globalThis.__sveltekit_1huwkfm.data, document.URL !== location.href && (location.href = location.href), y = e, await ((_c2 = (_b2 = e.hooks).init) == null ? void 0 : _c2.call(_b2)), Ie = Ut(e), I = document.documentElement, ye = t, ve = e.nodes[0], re = e.nodes[1], ve(), re(), v = (_d2 = history.state) == null ? void 0 : _d2[K], R = (_e6 = history.state) == null ? void 0 : _e6[W], v || (v = R = Date.now(), history.replaceState({ ...history.state, [K]: v, [W]: R }, ""));
+  ((_a3 = globalThis.__sveltekit_8nymd5) == null ? void 0 : _a3.data) && globalThis.__sveltekit_8nymd5.data, document.URL !== location.href && (location.href = location.href), y = e, await ((_c2 = (_b2 = e.hooks).init) == null ? void 0 : _c2.call(_b2)), Ie = Ut(e), I = document.documentElement, ye = t, ve = e.nodes[0], re = e.nodes[1], ve(), re(), v = (_d2 = history.state) == null ? void 0 : _d2[K], R = (_e6 = history.state) == null ? void 0 : _e6[W], v || (v = R = Date.now(), history.replaceState({ ...history.state, [K]: v, [W]: R }, ""));
   const r = C[v];
   function a() {
     r && (history.scrollRestoration = "manual", scrollTo(r.x, r.y));
