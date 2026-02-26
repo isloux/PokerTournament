@@ -21,3 +21,7 @@ Thumbs.db
 # Vite
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# wasm-pack build output
+src/lib/wasm/ticker-pkg/
+src/wasm/ticker/target/

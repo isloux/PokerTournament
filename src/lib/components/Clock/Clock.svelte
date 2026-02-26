@@ -1,6 +1,7 @@
 <script>
   import { tournament } from '$lib/stores/index.js';
   import { createAudioManager } from '$lib/utils/audio.js';
+  import { processTick } from '$lib/wasm/ticker.js';
   import { t } from '$lib/i18n/index.svelte.js';
   import { onMount, onDestroy } from 'svelte';
   import LevelInfo from './LevelInfo.svelte';
@@ -84,58 +85,43 @@
     tournament.save();
   }
 
-  function tick() {
-    // Compute how many whole seconds have elapsed since the clock last started
-    // or resumed. Reading from the store means this is correct even after a
-    // component remount (tab switch) because the anchor survived destruction.
-    const elapsedSeconds = Math.floor((Date.now() - tournament.clock.startTimestamp) / 1000);
-    let remaining = tournament.clock.timeRemainingAtStart - elapsedSeconds;
+  async function tick() {
+    const result = await processTick(
+      tournament.clock.startTimestamp,
+      tournament.clock.currentLevelIndex,
+      tournament.clock.timeRemainingAtStart,
+      tournament.structure.map(s => s.duration),
+      tournament.structure.map(s => s.type === 'break')
+    );
 
-    // Advance through as many levels as the elapsed time covers.
-    while (remaining <= 0) {
-      const levelIndex = tournament.clock.currentLevelIndex;
+    if (result.finished) {
+      tournament.clock.timeRemaining = 0;
+      tournament.clock.isRunning = false;
+      stopInterval();
+      tournament.status = 'finished';
+      tournament.save();
+      return;
+    }
 
-      if (levelIndex >= tournament.structure.length - 1) {
-        // No more levels — end the tournament.
-        tournament.clock.timeRemaining = 0;
-        tournament.clock.isRunning = false;
-        stopInterval();
-        tournament.status = 'finished';
-        tournament.save();
-        return;
-      }
-
-      // Carry the overshoot into the next level.
-      const wasBreak = tournament.structure[levelIndex]?.type === 'break';
-      tournament.clock.currentLevelIndex++;
-      const newLevel = tournament.structure[tournament.clock.currentLevelIndex];
-      const newLevelDuration = newLevel.duration * 60;
-
-      // remaining is negative (overshoot); add it to the new level's duration.
-      remaining = newLevelDuration + remaining;
-
-      // Re-anchor in the store so subsequent ticks (and any future remount) use the new level.
-      tournament.clock.startTimestamp = Date.now() - (newLevelDuration - remaining) * 1000;
-      tournament.clock.timeRemainingAtStart = newLevelDuration;
-      warningFired = remaining <= 60;
+    if (result.level_changed) {
+      tournament.clock.currentLevelIndex = result.current_level_index;
+      tournament.clock.startTimestamp = result.start_timestamp;
+      tournament.clock.timeRemainingAtStart = result.time_remaining_at_start;
+      warningFired = result.remaining <= 60;
 
       if (audio) {
-        if (wasBreak) {
-          audio.playBreakEnd();
-        } else {
-          audio.playRoundEnd();
-        }
+        if (result.play_audio === 1) audio.playBreakEnd();
+        else if (result.play_audio === 2) audio.playRoundEnd();
       }
       tournament.save();
     }
 
-    // Play the one-minute warning exactly once per level.
-    if (!warningFired && remaining <= 60 && audio) {
+    if (!warningFired && result.remaining <= 60 && audio) {
       audio.playWarning();
       warningFired = true;
     }
 
-    tournament.clock.timeRemaining = remaining;
+    tournament.clock.timeRemaining = result.remaining;
   }
 
   function advanceLevel() {
