@@ -190,7 +190,7 @@
   }
 </script>
 
-<div class="clock-tab" class:is-break={isBreak}>
+<div class="clock-tab" class:is-break={isBreak} class:is-paused={!tournament.clock.isRunning && tournament.status === 'running'}>
   {#if tournament.structure.length === 0}
     <p class="empty">{t('clock.setupFirst')}</p>
   {:else}
@@ -225,6 +225,12 @@
 
   .is-break {
     background: #f0fdf4;
+    border-radius: 8px;
+    padding: 2rem;
+  }
+
+  .is-paused {
+    background: #5f7893;
     border-radius: 8px;
     padding: 2rem;
   }

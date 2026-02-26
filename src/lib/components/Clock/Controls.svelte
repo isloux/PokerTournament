@@ -9,7 +9,12 @@
     {isRunning ? t('clock.pause') : t('clock.play')}
   </button>
   <button onclick={onNext} disabled={!canNext} title={t('clock.nextLevel')}>{t('clock.next')} &raquo;</button>
-  <button class="mute" onclick={onToggleMute} title={isMuted ? t('clock.unmute') : t('clock.mute')}>
+  <button
+    class="mute"
+    class:muted={isMuted}
+    onclick={onToggleMute}
+    title={isMuted ? t('clock.unmute') : t('clock.mute')}
+  >
     {isMuted ? t('clock.unmute') : t('clock.mute')}
   </button>
 </div>
@@ -47,5 +52,16 @@
   .mute {
     font-size: 0.85rem;
     color: #64748b;
+  }
+
+  .mute.muted {
+    background: #fecaca;
+    color: #dc2626;
+    border-color: #ef4444;
+  }
+
+  .mute.muted:hover {
+    background: #ef4444;
+    color: white;
   }
 </style>
