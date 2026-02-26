@@ -28,7 +28,6 @@ function processTickJS(startTimestamp, currentLevelIndex, timeRemainingAtStart, 
   let levelChanged = false;
   let newTimeRemainingAtStart = timeRemainingAtStart;
   const len = structureDurations.length;
-  console.log("Attention je suis en javascript");
 
   while (remaining <= 0) {
     if (currentLevelIndex >= len - 1) {
